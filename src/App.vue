@@ -5,20 +5,20 @@
 </template>
 
 <script>
-import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
 
 export default {
   name: 'app',
-  created () {
+  created() {
     const token = localStorage.getItem('sanmiToken')
     if (token) {
-      const decoded = jwt_decode(token)
+      const decoded = jwtDecode(token)
       this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
       this.$store.dispatch('setUser', decoded)
     }
   },
   methods: {
-    isEmpty(value) {
+    isEmpty (value) {
       return (
         value === undefined ||
         value === null ||

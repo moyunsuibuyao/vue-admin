@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import error404 from '@/assets/404.svg';
+import error404 from '@/assets/404.svg'
 
 export default {
   name: 'NotFound',
-  data () {
+  data() {
     return {
       code: 404,
       desc: 'Not Found This Page',

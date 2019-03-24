@@ -1,69 +1,93 @@
 <template>
   <div class="login">
     <img src="../assets/bg.jpg">
-    <Card class="login-card">
-      <p slot="title">欢迎登录</p>
-      <Form :model="loginForm" :rules="ruleValidate" ref="loginForm">
-        <FormItem prop="email">
-          <Input v-model="loginForm.email" placeholder="请输入邮箱" clearable>
-            <Icon type="ios-at" slot="prepend" />
-          </Input>
-        </FormItem>
-        <FormItem prop="password">
-          <Input type="password" v-model="loginForm.password" placeholder="请输入密码" clearable>
-            <Icon type="md-lock" slot="prepend" />
-          </Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" long @click="submitLoginData('loginForm')">登录</Button>
-          <Button type="text" long style="margin-top: 8px" @click="$router.push('/register')">没有账号，去注册</Button>
-        </FormItem>
-      </Form>
-    </Card>
+    <a-card class="login-card" title="欢迎登录">
+      <a-form :form="form" @submit="submitLoginData">
+        <a-form-item>
+          <a-input
+            v-decorator="[
+              'email',
+              {
+                rules: [{
+                  type: 'email', message: '邮箱格式不正确!',
+                }, {
+                  required: true, message: '邮箱不能为空',
+                }]
+              }
+            ]"
+            placeholder="请输入邮箱"
+          >
+            <i slot="addonBefore" class="fa fa-at"></i>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-input
+            v-decorator="[
+              'password',
+              {
+                rules: [{required: true, message: '请输入密码!' }]
+              }
+            ]"
+            type="password"
+            placeholder="请输入密码"
+          >
+            <i slot="addonBefore" class="fa fa-lock"></i>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-spin tip="注册中" :spinning="loading" :delay="300">
+            <a-button type="primary" block html-type="submit">登录</a-button>
+            <p class="register-btn" @click="$router.push('/register')">
+              没有账号，去注册
+            </p>
+          </a-spin>
+        </a-form-item>
+      </a-form>
+    </a-card>
   </div>
 </template>
 
 <script>
-import jwt_decode from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
+import { Base64 } from 'js-base64'
 
 export default {
   name: 'Login',
-  data () {
+  components: {},
+  data() {
     return {
-      loginForm: {
-        email: '',
-        password: ''
-      },
-      ruleValidate: {
-        email: [
-          { required: true, message: '邮箱不能为空', trigger: 'blur' },
-          { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ]
-      }
+      loading: false
     }
   },
+  beforeCreate() {
+    this.form = this.$form.createForm(this)
+  },
   methods: {
-    submitLoginData (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$axios.post('/api/users/login', this.loginForm).then(res => {
+    submitLoginData(e) {
+      e.preventDefault()
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          this.loading = true
+          const obj = {}
+          Object.assign(obj, values)
+          obj.password = Base64.encode(obj.password)
+          this.$axios.post('/api/users/login', obj).then(res => {
             const { token } = res.data
             localStorage.setItem('sanmiToken', token)
             //  解析 token
-            const decoded = jwt_decode(token)
+            const decoded = jwtDecode(token)
             this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
             this.$store.dispatch('setUser', decoded)
-
-            this.$Message.success('登录成功!')
+            this.$message.success('登录成功!')
+            this.loading = false
             this.$router.push('/index')
+          }).catch(() => {
+            this.loading = false
           })
         }
       })
     },
-    isEmpty (value) {
+    isEmpty(value) {
       return (
         value === undefined ||
         value === null ||
@@ -91,6 +115,22 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      .register-btn {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        cursor: pointer;
+        &:hover {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+</style>
+<style lang="less">
+  .login {
+    .ant-card-body {
+      padding: 16px !important;
     }
   }
 </style>

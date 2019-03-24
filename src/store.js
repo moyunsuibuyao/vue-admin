@@ -6,7 +6,7 @@ Vue.use(Vuex)
 const types = {
   SET_AUTHENTICATED: 'SET_AUTHENTICATED',
   SET_USER: 'SET_USER'
-};
+}
 
 const state = {
   isAuthenticated: false,

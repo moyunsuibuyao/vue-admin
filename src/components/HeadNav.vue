@@ -1,52 +1,51 @@
 <template>
-  <Header
-    :style="{background: '#fff', padding: 0, boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"
-    class="layout-header-bar"
-  >
+  <a-layout-header class="layout-header-bar" :class="collapsed ? 'close-width' : 'open-width'">
     <div class="header-nav">
-      <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
+      <a-icon
+        class="trigger"
+        :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+        @click="collapsedMenu"
+      />
       <div class="header-nav__right">
-        <Dropdown @on-click="selectDropdownItem">
-          <div style="cursor: pointer">
-            <Avatar :src="userInfo.avatar" size="small" />
-            <Icon type="md-arrow-dropdown" style="margin-left: 5px; color: #333; font-size: 14px"></Icon>
-          </div>
-          <DropdownMenu slot="list" style="text-align: left">
-            <DropdownItem name="person">个人信息</DropdownItem>
-            <DropdownItem name="logout">退出登录</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <a-dropdown>
+          <a class="ant-dropdown-link" href="#" style="cursor: pointer">
+            <!--<a-avatar :src="userInfo.avatar" size="small" />-->
+            <span>欢迎，{{userInfo.name}}</span>
+          </a>
+          <a-menu slot="overlay" style="margin-top: 10px" @click="selectDropdownItem">
+            <a-menu-item key="person">
+              <a href="javascript:;">个人信息</a>
+            </a-menu-item>
+            <a-menu-item key="logout">
+              <a href="javascript:;">退出登录</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </div>
     </div>
-  </Header>
+  </a-layout-header>
 </template>
 
 <script>
 export default {
   name: 'head-nav',
-  data () {
+  data() {
     return {
-      isCollapsed: false
+      collapsed: false
     }
   },
   computed: {
-    rotateIcon () {
-      return [
-        'menu-icon',
-        this.isCollapsed ? 'rotate-icon' : ''
-      ]
-    },
-    userInfo () {
+    userInfo() {
       return this.$store.getters.user
     }
   },
   methods: {
-    collapsedSider () {
-      this.isCollapsed = !this.isCollapsed
-      this.$emit('collapsedSider', this.isCollapsed)
+    collapsedMenu() {
+      this.collapsed = !this.collapsed
+      this.$emit('collapsedMenu', this.collapsed)
     },
-    selectDropdownItem (select) {
-      switch (select) {
+    selectDropdownItem(select) {
+      switch (select.key) {
         case 'person':
           this.showInfoList()
           break
@@ -57,9 +56,11 @@ export default {
           console.log('no this item')
       }
     },
-    showInfoList () {},
-    logout () {
+    showInfoList() {},
+    logout() {
       localStorage.removeItem('sanmiToken')
+      localStorage.removeItem('defaultSelectedMenuItem')
+      localStorage.removeItem('defaultOpenKeys')
       this.$store.dispatch('clearCurrentStatus')
       this.$router.push('/login')
     }
@@ -70,20 +71,23 @@ export default {
 <style scoped lang="less">
   .layout-header-bar{
     background: #fff;
-    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    padding: 0;
+    box-shadow: 0 1px 1px 1px rgba(0,0,0,.1);
+    position: fixed;
+    z-index: 1;
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color .3s;
+      &:hover {
+        color: #1890ff;
+      }
+    }
     .header-nav {
       height: 100%;
       display: flex;
-      .menu-icon{
-        cursor: pointer;
-        display: inline-block;
-        width: 30px;
-        line-height: 64px;
-        transition: all .3s;
-      }
-      .rotate-icon{
-        transform: rotate(-90deg);
-      }
       .header-nav__right {
         flex: 1;
         text-align: right;
@@ -95,5 +99,13 @@ export default {
         }
       }
     }
+  }
+  .close-width {
+    width: calc(100% - 80px);
+    left: 80px;
+  }
+  .open-width {
+    width: calc(100% - 200px);
+    left: 200px;
   }
 </style>
