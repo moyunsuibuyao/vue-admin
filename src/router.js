@@ -1,33 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from './views/Index.vue'
-import Register from './views/Register.vue'
-import Login from './views/Login.vue'
-import NotFound from './views/404.vue'
-import Home from './views/Home/index.vue'
-import Essay from './views/Article/index.vue'
-import Write from './views/Article/write.vue'
-import Frontend from './views/Article/frontend.vue'
 
 Vue.use(Router)
+
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/register',
-      name: 'Register',
-      component: Register
-    },
-    {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: () => import('./views/Login')
     },
     {
-      path: '*',
-      name: '404',
-      component: NotFound
+      path: '/register',
+      name: 'Register',
+      component: () => import('./views/Register')
     },
     {
       path: '/',
@@ -35,14 +23,26 @@ const router = new Router({
     },
     {
       path: '/index',
-      component: Index,
+      component: () => import('./components/BasicLayout'),
       children: [
-        { path: '', name: 'Home', component: Home },
-        { path: '/article/essay', name: 'Essay', component: Essay },
-        { path: '/article/write', name: 'Write', component: Write },
-        { path: '/article/frontend', name: 'Frontend', component: Frontend }
+        {
+          path: '',
+          name: 'Home',
+          component: () => import('./views/Home'),
+          meta: {
+            keepAlive: false
+          }
+        }
       ]
     }
+    // {
+    //   path: '/about',
+    //   name: 'about',
+    //   // route level code-splitting
+    //   // this generates a separate chunk (about.[hash].js) for this route
+    //   // which is lazy-loaded when the route is visited.
+    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+    // }
   ]
 })
 
@@ -52,7 +52,13 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login' || to.path === '/register') {
     next()
   } else {
-    isLogin ? next() : next('/login')
+    if (isLogin) {
+      localStorage.setItem('defaultKeys', to.path)
+      next()
+    } else {
+      localStorage.removeItem('defaultKeys')
+      next('/login')
+    }
   }
 })
 
