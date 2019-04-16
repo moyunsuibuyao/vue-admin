@@ -1,13 +1,143 @@
 <template>
-  <div id="basic-layout"></div>
+  <div id="basic-layout">
+    <Layout>
+      <Header :style="{position: 'fixed', width: '100%', padding: 0, background: '#fff'}">
+        <Menu mode="horizontal" style="height: 64px">
+          <div class="layout-header__wrapper">
+            <div class="layout-title">三米主页</div>
+            <div class="layout-nav">
+              <template v-for="item in menuList">
+                <MenuItem v-if="!item.children.length" :key="item._id" :name="item.path">
+                  <span :class="item.icon"></span>
+                  {{item.name}}
+                </MenuItem>
+                <Submenu v-else :key="item._id" :name="item.path">
+                  <template slot="title">
+                    <span :class="item.icon"></span>
+                    {{item.name}}
+                  </template>
+                  <template v-for="val in item.children">
+                    <MenuItem :key="val._id" :name="val.path">{{val.name}}</MenuItem>
+                  </template>
+                </Submenu>
+              </template>
+            </div>
+            <div class="layout-user">
+              <Button shape="circle" type="error" icon="ios-brush" style="margin-right: 40px">写文章</Button>
+              <Dropdown>
+                <a href="javascript:void(0)">
+                  <img src="../assets/moyun.jpeg" class="idol-avatar">
+                  <span class="fa fa-caret-down caret-down"></span>
+                </a>
+                <DropdownMenu slot="list">
+                  <DropdownItem>个人信息</DropdownItem>
+                  <DropdownItem>退出</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </div>
+        </Menu>
+      </Header>
+      <Content :style="{margin: '64px 0 0 0', background: '#fff', minHeight: '500px'}">
+        <template v-if="$route.meta.keepAlive">
+          <keep-alive>
+            <router-view style="padding: 20px"></router-view>
+          </keep-alive>
+        </template>
+        <template v-else>
+          <router-view style="padding: 20px"></router-view>
+        </template>
+      </Content>
+    </Layout>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'BasicLayout'
+  name: 'BasicLayout',
+  data() {
+    return {
+      menuList: []
+    }
+  },
+  created () {
+    this.getMenuList()
+  },
+  methods: {
+    getMenuList() {
+      this.$axios.get('/api/menus/list').then((res) => {
+        if (res.data && res.data.length) {
+          this.menuList = this.treeData(res.data).filter((item) => {
+            return item.level !== 2
+          })
+          console.log(this.menuList)
+        } else {
+          this.menuList = []
+        }
+      })
+    },
+    treeData(data) {
+      data.forEach((item) => {
+        if (item.level === 1) {
+          this.$set(item, 'children', [])
+        }
+        data.forEach((val) => {
+          if (item.level === 2 && item.parentId === val._id) {
+            val.children.push(item)
+          }
+        })
+      })
+      return data
+    }
+  }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  #basic-layout {
+    height: 100%;
+    .layout-header__wrapper {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      -webkit-align-items: center;
+      box-align: center;
+      -moz-box-align: center;
+      -webkit-box-align: center;
+      .layout-title {
+        width: 100px;
+        height: 100%;
+        color: #2C3E50;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 40px;
+      }
+      .layout-nav {
+        margin-left: 50px;
+        box-flex: 1;
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        flex: 1;
+        -webkit-flex: 1;
+      }
+      .layout-user {
+        margin-right: 20px;
+        .idol-avatar {
+          height: 40px;
+          width: 40px;
+          border: 1px solid #ddd;
+          border-radius: 50%;
+          vertical-align: middle;
+        }
+        .caret-down {
+          margin-left: 10px;
+          font-size: 16px;
+          color: #999;
+        }
+      }
+    }
+  }
 </style>

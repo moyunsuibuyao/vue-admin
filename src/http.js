@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message, Spin } from 'iview'
+import router from './router'
 
 // 请求拦截
 axios.interceptors.request.use(config => {
@@ -26,6 +27,7 @@ axios.interceptors.response.use(response => {
   switch (status) {
     case 401:
       Message.error('token失效，请重新登录')
+      router.push('/login')
       break
     case 404:
       Message.error('找不到接口地址')
