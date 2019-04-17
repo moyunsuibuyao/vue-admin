@@ -2,12 +2,17 @@
   <div id="basic-layout">
     <Layout>
       <Header :style="{position: 'fixed', width: '100%', padding: 0, background: '#fff'}">
-        <Menu mode="horizontal" style="height: 64px">
+        <Menu mode="horizontal" style="height: 64px" :active-name="$route.meta.name" ref="sideMenu">
           <div class="layout-header__wrapper">
             <div class="layout-title">三米主页</div>
             <div class="layout-nav">
               <template v-for="item in menuList">
-                <MenuItem v-if="!item.children.length" :key="item._id" :name="item.path">
+                <MenuItem
+                  v-if="!item.children.length"
+                  :to="item.path"
+                  :key="item._id"
+                  :name="item.path"
+                >
                   <span :class="item.icon"></span>
                   {{item.name}}
                 </MenuItem>
@@ -17,7 +22,7 @@
                     {{item.name}}
                   </template>
                   <template v-for="val in item.children">
-                    <MenuItem :key="val._id" :name="val.path">{{val.name}}</MenuItem>
+                    <MenuItem :key="val._id" :name="val.path" :to="val.path">{{val.name}}</MenuItem>
                   </template>
                 </Submenu>
               </template>
@@ -74,6 +79,9 @@ export default {
         } else {
           this.menuList = []
         }
+        this.$nextTick(() => {
+          this.$refs.sideMenu.updateActiveName()
+        })
       })
     },
     treeData(data) {

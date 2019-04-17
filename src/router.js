@@ -18,6 +18,11 @@ const router = new Router({
       component: () => import('./views/Register')
     },
     {
+      path: '*',
+      name: '404',
+      component: () => import('./views/404/404')
+    },
+    {
       path: '/',
       redirect: '/index'
     },
@@ -30,7 +35,62 @@ const router = new Router({
           name: 'Home',
           component: () => import('./views/Home'),
           meta: {
-            keepAlive: false
+            keepAlive: false,
+            name: '/index'
+          }
+        },
+        {
+          path: '/article/essay',
+          name: 'Essay',
+          component: () => import('./views/Article/essay'),
+          meta: {
+            keepAlive: false,
+            name: '/article/essay'
+          }
+        },
+        {
+          path: '/article/frontend',
+          name: 'Frontend',
+          component: () => import('./views/Article/frontend'),
+          meta: {
+            keepAlive: false,
+            name: '/article/frontend'
+          }
+        },
+        {
+          path: '/life/book',
+          name: 'Book',
+          component: () => import('./views/Life/book'),
+          meta: {
+            keepAlive: false,
+            name: '/life/book'
+          }
+        },
+        {
+          path: '/life/music',
+          name: 'Music',
+          component: () => import('./views/Life/music'),
+          meta: {
+            keepAlive: false,
+            name: '/life/music'
+          }
+        },
+        {
+          path: '/life/movie',
+          name: 'Movie',
+          component: () => import('./views/Life/movie'),
+          meta: {
+            keepAlive: false,
+            name: '/life/movie'
+          }
+        },
+        {
+          path: '/profile',
+          name: 'Profile',
+          component: () => import('./views/Profile'),
+          meta: {
+            keepAlive: false,
+            name: '/profile'
           }
         }
       ]
