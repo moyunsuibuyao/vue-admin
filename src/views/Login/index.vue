@@ -60,8 +60,9 @@ export default {
             localStorage.setItem('sanmiToken', token)
             //  解析 token
             const decoded = jwtDecode(token)
-            this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
-            this.$store.dispatch('setUser', decoded)
+            console.log('decoded', decoded)
+            // this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
+            this.$store.dispatch('userInfo', decoded)
             this.$Message.success('登录成功!')
             this.$router.push('/index')
           })

@@ -29,14 +29,14 @@
             </div>
             <div class="layout-user">
               <Button shape="circle" type="error" icon="ios-brush" style="margin-right: 40px">写文章</Button>
-              <Dropdown>
+              <Dropdown @on-click="handleClick">
                 <a href="javascript:void(0)">
                   <img src="../assets/moyun.jpeg" class="idol-avatar">
                   <span class="fa fa-caret-down caret-down"></span>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem>个人信息</DropdownItem>
-                  <DropdownItem>退出</DropdownItem>
+                  <DropdownItem name="personal">个人信息</DropdownItem>
+                  <DropdownItem name="logout">退出</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -63,6 +63,11 @@ export default {
   data() {
     return {
       menuList: []
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.getters.userInfo
     }
   },
   created () {
@@ -96,6 +101,18 @@ export default {
         })
       })
       return data
+    },
+    handleClick(name) {
+      switch (name) {
+        case 'logout':
+          localStorage.removeItem('sanmiToken')
+          this.$router.push('/login')
+          break
+        case 'personal':
+          break
+        default:
+          console.log('no found this name')
+      }
     }
   }
 }
