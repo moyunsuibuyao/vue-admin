@@ -43,7 +43,7 @@
           </div>
         </Menu>
       </Header>
-      <Content :style="{margin: '64px 0 0 0', background: '#fff', minHeight: '500px'}">
+      <Content :style="{margin: '64px 0 0 0', background: '#fff', height: contentHeight}">
         <template v-if="$route.meta.keepAlive">
           <keep-alive>
             <router-view style="padding: 20px"></router-view>
@@ -68,6 +68,9 @@ export default {
   computed: {
     userInfo() {
       return this.$store.getters.userInfo
+    },
+    contentHeight() {
+      return `${window.innerHeight - 64}px`
     }
   },
   created () {
