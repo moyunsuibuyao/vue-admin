@@ -1,8 +1,16 @@
 <template>
   <div id="basic-layout">
+    <BackTop></BackTop>
     <Layout>
-      <Header :style="{position: 'fixed', width: '100%', padding: 0, background: '#fff'}">
-        <Menu mode="horizontal" style="height: 64px" :active-name="$route.meta.name" ref="sideMenu">
+      <Header
+        :style="{
+          position: 'fixed',
+          width: '100%',
+          padding: 0,
+          background: '#fff',
+          zIndex: 1000
+        }">
+        <Menu mode="horizontal" style="height: 64px" :active-name="$route.path" ref="sideMenu">
           <div class="layout-header__wrapper">
             <div class="layout-title">三米主页</div>
             <div class="layout-nav">
@@ -58,6 +66,8 @@
 </template>
 
 <script>
+import jwtDecode from 'jwt-decode'
+
 export default {
   name: 'BasicLayout',
   data() {
@@ -74,6 +84,11 @@ export default {
     }
   },
   created () {
+    const token = localStorage.getItem('sanmiToken')
+    if (token) {
+      const decoded = jwtDecode(token)
+      this.$store.dispatch('userInfo', decoded)
+    }
     this.getMenuList()
   },
   methods: {
@@ -112,6 +127,7 @@ export default {
           this.$router.push('/login')
           break
         case 'personal':
+          this.$router.push('/personal')
           break
         default:
           console.log('no found this name')

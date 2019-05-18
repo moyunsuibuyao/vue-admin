@@ -1,0 +1,70 @@
+.loop(@counter) when (@counter >= 0) {
+  .p-@{counter} {
+    padding: (1px * @counter)!important;
+  }
+  .p-t-@{counter} {
+    padding-top: (1px * @counter)!important;
+  }
+  .p-r-@{counter} {
+    padding-right: (1px * @counter)!important;
+  }
+  .p-b-@{counter} {
+    padding-bottom: (1px * @counter)!important;
+  }
+  .p-l-@{counter} {
+    padding-left: (1px * @counter)!important;
+  }
+  .m-@{counter} {
+    margin: (1px * @counter)!important;
+  }
+  .m-t-@{counter} {
+    margin-top: (1px * @counter)!important;
+  }
+  .m-r-@{counter} {
+    margin-right: (1px * @counter)!important;
+  }
+  .m-b-@{counter} {
+    margin-bottom: (1px * @counter)!important;
+  }
+  .m-l-@{counter} {
+    margin-left: (1px * @counter)!important;
+  }
+  .fz-@{counter} {
+    font-size: (1px * @counter)!important;
+  }
+  .w-@{counter} {
+    width: (1% * @counter)!important;
+  }
+  .h-@{counter} {
+    height: (1% * @counter)!important;
+  }
+  .w-px-@{counter} {
+    width: (1px * @counter)!important;
+  }
+  .h-px-@{counter} {
+    height: (1px * @counter)!important;
+  }
+  .loop((@counter - 1));    // 递归调用自身
+}
+
+.loop(100);
+
+.tr {
+  text-align: right!important;
+}
+.tl {
+  text-align: left!important;
+}
+.tc {
+  text-align: center!important;
+}
+
+.d-block {
+  display: block!important;
+}
+.d-inline {
+  display: inline!important;
+}
+.d-inline-block {
+  display: inline-block!important;
+}

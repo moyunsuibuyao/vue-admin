@@ -36,7 +36,6 @@ const router = new Router({
           component: () => import('./views/Home'),
           meta: {
             keepAlive: false,
-            name: '/index'
           }
         },
         {
@@ -45,7 +44,6 @@ const router = new Router({
           component: () => import('./views/Article/essay'),
           meta: {
             keepAlive: false,
-            name: '/article/essay'
           }
         },
         {
@@ -53,8 +51,7 @@ const router = new Router({
           name: 'Frontend',
           component: () => import('./views/Article/frontend'),
           meta: {
-            keepAlive: false,
-            name: '/article/frontend'
+            keepAlive: false
           }
         },
         {
@@ -62,8 +59,7 @@ const router = new Router({
           name: 'Book',
           component: () => import('./views/Life/book'),
           meta: {
-            keepAlive: false,
-            name: '/life/book'
+            keepAlive: false
           }
         },
         {
@@ -71,8 +67,7 @@ const router = new Router({
           name: 'Music',
           component: () => import('./views/Life/music'),
           meta: {
-            keepAlive: false,
-            name: '/life/music'
+            keepAlive: false
           }
         },
         {
@@ -80,8 +75,7 @@ const router = new Router({
           name: 'Movie',
           component: () => import('./views/Life/movie'),
           meta: {
-            keepAlive: false,
-            name: '/life/movie'
+            keepAlive: false
           }
         },
         {
@@ -89,8 +83,15 @@ const router = new Router({
           name: 'Profile',
           component: () => import('./views/Profile'),
           meta: {
-            keepAlive: false,
-            name: '/profile'
+            keepAlive: false
+          }
+        },
+        {
+          path: '/personal',
+          name: '/Personal',
+          component: () => import('./views/Personal'),
+          meta: {
+            keepAlive: false
           }
         }
       ]

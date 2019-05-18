@@ -18,7 +18,7 @@
     </nav>
     <div class="right-content">
       <BaseInfo v-if="selectionItem === '1'" />
-      <LifeExperience v-if="selectionItem === '2'" />
+      <WorkExperience v-if="selectionItem === '2'" />
       <ProjectExperience v-if="selectionItem === '3'" />
     </div>
   </div>
@@ -26,14 +26,14 @@
 
 <script>
 import BaseInfo from '@/components/ProfileComponent/BaseInfo.vue'
-import LifeExperience from '@/components/ProfileComponent/LifeExperience.vue'
+import WorkExperience from '@/components/ProfileComponent/WorkExperience.vue'
 import ProjectExperience from '@/components/ProfileComponent/ProjectExperience.vue'
 
 export default {
   name: 'index',
   components: {
     BaseInfo,
-    LifeExperience,
+    WorkExperience,
     ProjectExperience
   },
   data() {
