@@ -17,7 +17,7 @@
       </div>
       <BaseInfo ref="baseInfo" />
     </div>
-    <div class="work-experience m-t-20">
+    <div class="work-experience">
       <div class="info-title">
         <Row type="flex" align="middle">
           <Col span="12">
@@ -25,27 +25,31 @@
           </Col>
           <Col span="12" class="tr">
             <Tooltip placement="top" content="新增工作经历">
-              <Button type="text" @click="addWorkExperience" class="p-0 m-0">
+              <Button type="text" @click="openworkExperienceModal" class="p-0 m-0">
                 <i class="fa fa-plus fz-16"></i>
               </Button>
             </Tooltip>
           </Col>
         </Row>
       </div>
+      <WorkExperience ref="work" />
     </div>
   </div>
 </template>
 
 <script>
 import BaseInfo from '@/components/PersonalComponent/BaseInfo.vue'
+import WorkExperience from '@/components/PersonalComponent/WorkExperience.vue'
 
 export default {
   name: 'index',
   components: {
-    BaseInfo
+    BaseInfo,
+    WorkExperience
   },
   data() {
-    return {}
+    return {
+    }
   },
   computed: {
     userInfo() {
@@ -71,9 +75,10 @@ export default {
       this.$Spin.hide()
       console.log('this.$refs.baseInfo.infoForm', this.$refs.baseInfo.infoForm)
     },
-    addWorkExperience() {},
-    resetForm(form) {
-      this.$refs[form].resetFields()
+    openworkExperienceModal() {
+      if (this.$refs.work) {
+        this.$refs.work.openworkExperienceModal(null)
+      }
     }
   }
 }
@@ -81,4 +86,13 @@ export default {
 
 <style scoped lang="less">
   @import "./styles";
+</style>
+<style lang="less">
+  .personal {
+    .work-content {
+      .ivu-poptip-confirm .ivu-poptip-body .ivu-icon {
+        left: 18px!important;
+      }
+    }
+  }
 </style>

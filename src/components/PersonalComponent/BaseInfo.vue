@@ -1,6 +1,6 @@
 <template>
   <div class="base-form">
-    <Form :model="infoForm" ref="infoForm" label-position="left" :label-width="36">
+    <Form :model="infoForm" ref="infoForm" label-position="left" :label-width="60">
       <Row :gutter="40">
         <Col span="6">
           <FormItem label="姓名" prop="name">
@@ -46,6 +46,17 @@
         </Col>
       </Row>
       <Row :gutter="40">
+        <template v-for="item in infoForm.skill">
+          <Col span="6" :key="item._id">
+            <FormItem :label="item.label" :key="item._id">
+              <Rate allow-half show-text v-model="item.value">
+                <span style="color: #f5a623">{{showTxt(item.value)}}</span>
+              </Rate>
+            </FormItem>
+          </Col>
+        </template>
+      </Row>
+      <Row :gutter="40">
         <Col span="12">
           <FormItem label="课程" prop="subject">
             <Input type="textarea" :rows="3" v-model="infoForm.subject"></Input>
@@ -76,14 +87,15 @@ export default {
         graduateDate: '',
         major: '',
         faculty: '',
-        remark: ''
+        remark: '',
+        skill: [],
       }
     }
   },
   computed: {
     userInfo() {
       return this.$store.getters.userInfo
-    }
+    },
   },
   created () {
     console.log(this.userInfo)
@@ -98,6 +110,17 @@ export default {
           Object.assign(this.infoForm, res.data)
         }
       })
+    },
+    showTxt(num) {
+      if (num >= 1 && num <= 2) {
+        return '了解'
+      } else if (num > 2 && num <= 3) {
+        return '掌握'
+      } else if (num > 3 && num <= 4.5) {
+        return '熟练'
+      } else {
+        return '精通'
+      }
     }
   }
 }

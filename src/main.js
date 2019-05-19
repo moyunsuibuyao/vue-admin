@@ -7,10 +7,13 @@ import './global.less'
 import axios from './http'
 import router from './router'
 import store from './store/store'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+Vue.prototype.$moment = moment
 Vue.use(iView)
+moment.locale('zh-cn')
 
 new Vue({
   router,
