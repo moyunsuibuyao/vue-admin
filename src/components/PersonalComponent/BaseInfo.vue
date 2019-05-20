@@ -128,9 +128,7 @@ export default {
   },
   methods: {
     getBaseInfo() {
-      this.$axios.get(`/api/personal/current`, {
-        params: { userId: this.userInfo.id }
-      }).then((res) => {
+      this.$axios.get(`/api/personal/current`).then((res) => {
         if (res && res.data) {
           Object.assign(this.infoForm, res.data)
         }

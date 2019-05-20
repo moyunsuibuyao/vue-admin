@@ -9,14 +9,21 @@
           background: '#fff',
           zIndex: 1000
         }">
-        <Menu mode="horizontal" style="height: 64px" :active-name="$route.path" ref="sideMenu">
+        <Menu
+          mode="horizontal"
+          style="height: 64px"
+          :active-name="$route.path"
+          ref="sideMenu"
+          @on-select="selectMenu"
+        >
           <div class="layout-header__wrapper">
             <div class="layout-title">三米主页</div>
             <div class="layout-nav">
+<!--              :to="item.path"-->
               <template v-for="item in menuList">
                 <MenuItem
                   v-if="!item.children.length"
-                  :to="item.path"
+                  to="/profile"
                   :key="item._id"
                   :name="item.path"
                 >
@@ -29,13 +36,22 @@
                     {{item.name}}
                   </template>
                   <template v-for="val in item.children">
-                    <MenuItem :key="val._id" :name="val.path" :to="val.path">{{val.name}}</MenuItem>
+<!--                    <MenuItem :key="val._id" :name="val.path" :to="val.path">{{val.name}}</MenuItem>-->
+                    <MenuItem :key="val._id" :name="val.path" to="/profile">{{val.name}}</MenuItem>
                   </template>
                 </Submenu>
               </template>
             </div>
             <div class="layout-user">
-              <Button shape="circle" type="error" icon="ios-brush" style="margin-right: 40px">写文章</Button>
+              <Button
+                shape="circle"
+                type="error"
+                icon="ios-brush"
+                @click="writeArticle"
+                style="margin-right: 40px"
+              >
+                写文章
+              </Button>
               <Dropdown @on-click="handleClick">
                 <a href="javascript:void(0)">
                   <img src="../assets/moyun.jpeg" class="idol-avatar">
@@ -97,7 +113,6 @@ export default {
           this.menuList = this.treeData(res.data).filter((item) => {
             return item.level !== 2
           })
-          console.log(this.menuList)
         } else {
           this.menuList = []
         }
@@ -119,6 +134,16 @@ export default {
       })
       return data
     },
+    writeArticle() {
+      if (this.userInfo.identity === '0') {
+        this.$Message.warning('暂无权限')
+      }
+    },
+    selectMenu() {
+      if (this.userInfo.identity === '0') {
+        return this.$Message.warning('现只开放简历模块，其他模块暂未开放')
+      }
+    },
     handleClick(name) {
       switch (name) {
         case 'logout':
@@ -126,6 +151,9 @@ export default {
           this.$router.push('/login')
           break
         case 'personal':
+          if (this.userInfo.identity === '0') {
+            return this.$Message.warning('暂无权限')
+          }
           this.$router.push('/personal')
           break
         default:

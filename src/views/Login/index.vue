@@ -34,8 +34,8 @@ export default {
   data () {
     return {
       loginForm: {
-        email: '',
-        password: ''
+        email: 'guest@guest.com',
+        password: '123456'
       },
       rules: {
         email: [
@@ -64,7 +64,7 @@ export default {
             // this.$store.dispatch('setAuthenticated', !this.isEmpty(decoded))
             this.$store.dispatch('userInfo', decoded)
             this.$Message.success('登录成功!')
-            this.$router.push('/index')
+            this.$router.push('/profile')
           })
         }
       })

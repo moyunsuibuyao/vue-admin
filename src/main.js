@@ -15,6 +15,14 @@ Vue.prototype.$moment = moment
 Vue.use(iView)
 moment.locale('zh-cn')
 
+if (process.env.NODE_ENV === 'production') {
+  axios.get('/static/config.json').then((res) => {
+    Vue.prototype.BASE_URL = res.data.BASE_URL
+    axios.defaults.baseURL = res.data.BASE_URL
+    axios.defaults.headers.common['Content-Type'] = 'application/json'
+  })
+}
+
 new Vue({
   router,
   store,

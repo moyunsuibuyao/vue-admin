@@ -16,7 +16,7 @@
         <FormItem label="结束时间" prop="endTime">
           <DatePicker class="d-block" type="month" v-model="experienceForm.endTime"></DatePicker>
         </FormItem>
-        <FormItem :label="type === 'work' ? '工作描述' : '项目描述'" prop="remark">
+        <FormItem :label="experienceType === 'work' ? '工作描述' : '项目描述'" prop="remark">
           <Input v-model="experienceForm.remark" type="textarea" :rows="4"></Input>
         </FormItem>
       </Form>
@@ -30,7 +30,7 @@
         {{ $moment(row.startTime).format('YYYY-MM') }}
       </template>
       <template slot-scope="{ row }" slot="endTime">
-        {{ $moment(row.endTime).format('YYYY-MM') }}
+        {{ filterDate(row.endTime) }}
       </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button
@@ -199,6 +199,14 @@ export default {
           remark: ''
         }
       }
+    },
+    filterDate(value) {
+      const dateValue = this.$moment(value).valueOf()
+      const nowDate = this.$moment().valueOf()
+      if (dateValue >= nowDate) {
+        return '至今'
+      }
+      return this.$moment(value).format('YYYY-MM')
     }
   }
 }

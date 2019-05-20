@@ -22,20 +22,24 @@ const router = new Router({
       name: '404',
       component: () => import('./views/404/404')
     },
+    // {
+    //   path: '/',
+    //   redirect: '/index'
+    // },
     {
       path: '/',
-      redirect: '/index'
+      redirect: '/profile'
     },
     {
-      path: '/index',
+      path: '/profile',
       component: () => import('./components/BasicLayout'),
       children: [
         {
           path: '',
-          name: 'Home',
-          component: () => import('./views/Home'),
+          name: 'Profile',
+          component: () => import('./views/Profile'),
           meta: {
-            keepAlive: false,
+            keepAlive: false
           }
         },
         {
@@ -78,14 +82,14 @@ const router = new Router({
             keepAlive: false
           }
         },
-        {
-          path: '/profile',
-          name: 'Profile',
-          component: () => import('./views/Profile'),
-          meta: {
-            keepAlive: false
-          }
-        },
+        // {
+        //   path: '/profile',
+        //   name: 'Profile',
+        //   component: () => import('./views/Profile'),
+        //   meta: {
+        //     keepAlive: false
+        //   }
+        // },
         {
           path: '/personal',
           name: '/Personal',

@@ -99,9 +99,7 @@ export default {
   },
   methods: {
     initWorkData() {
-      this.$axios.get('/api/works/list', {
-        params: { userId: this.userInfo.id }
-      }).then((res) => {
+      this.$axios.get('/api/works/list').then((res) => {
         if (res && res.data) {
           this.workData = res.data
         } else {
@@ -110,9 +108,7 @@ export default {
       })
     },
     initProjectData() {
-      this.$axios.get('/api/projects/list', {
-        params: { userId: this.userInfo.id }
-      }).then((res) => {
+      this.$axios.get('/api/projects/list').then((res) => {
         if (res && res.data) {
           this.projectData = res.data
         } else {
