@@ -8,6 +8,19 @@
           </FormItem>
         </Col>
         <Col span="6">
+          <FormItem label="性别" prop="name">
+            <Select v-model="infoForm.sex" clearable>
+              <Option :value="1">男</Option>
+              <Option :value="0">女</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="6">
+          <FormItem label="城市" prop="phone">
+            <Input v-model="infoForm.city"></Input>
+          </FormItem>
+        </Col>
+        <Col span="6">
           <FormItem label="手机" prop="phone">
             <Input v-model="infoForm.phone"></Input>
           </FormItem>
@@ -18,12 +31,15 @@
           </FormItem>
         </Col>
         <Col span="6">
+          <FormItem label="职业" prop="phone">
+            <Input v-model="infoForm.job"></Input>
+          </FormItem>
+        </Col>
+        <Col span="6">
           <FormItem label="学校" prop="school">
             <Input v-model="infoForm.school"></Input>
           </FormItem>
         </Col>
-      </Row>
-      <Row :gutter="40">
         <Col span="6">
           <FormItem label="学院" prop="faculty">
             <Input v-model="infoForm.faculty"></Input>
@@ -32,6 +48,11 @@
         <Col span="6">
           <FormItem label="专业" prop="major">
             <Input v-model="infoForm.major"></Input>
+          </FormItem>
+        </Col>
+        <Col span="6">
+          <FormItem label="学历" prop="phone">
+            <Input v-model="infoForm.education"></Input>
           </FormItem>
         </Col>
         <Col span="6">
@@ -89,13 +110,17 @@ export default {
         faculty: '',
         remark: '',
         skill: [],
+        education: '',
+        job: '',
+        sex: '',
+        city: ''
       }
     }
   },
   computed: {
     userInfo() {
       return this.$store.getters.userInfo
-    },
+    }
   },
   created () {
     console.log(this.userInfo)

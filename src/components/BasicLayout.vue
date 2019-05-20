@@ -1,6 +1,5 @@
 <template>
   <div id="basic-layout">
-    <BackTop></BackTop>
     <Layout>
       <Header
         :style="{
