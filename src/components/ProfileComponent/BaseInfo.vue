@@ -1,6 +1,6 @@
 <template>
   <div class="h-100">
-    <Card class="h-100">
+    <Card class="h-100 of-y-auto">
       <div class="base">
         <h3 class="p-b-10 bd-bottom">基本信息</h3>
         <Row class="info-cell">

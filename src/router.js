@@ -4,8 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const router = new Router({
-  // mode: 'history',
-  // base: process.env.BASE_URL,
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
     {
       path: '/login',
@@ -20,7 +20,7 @@ const router = new Router({
     {
       path: '*',
       name: '404',
-      component: () => import('./views/404/404')
+      component: () => import('./views/NoFound')
     },
     // {
     //   path: '/',
@@ -47,7 +47,7 @@ const router = new Router({
           name: 'Essay',
           component: () => import('./views/Article/essay'),
           meta: {
-            keepAlive: false,
+            keepAlive: false
           }
         },
         {
@@ -82,18 +82,18 @@ const router = new Router({
             keepAlive: false
           }
         },
-        // {
-        //   path: '/profile',
-        //   name: 'Profile',
-        //   component: () => import('./views/Profile'),
-        //   meta: {
-        //     keepAlive: false
-        //   }
-        // },
         {
           path: '/personal',
           name: '/Personal',
           component: () => import('./views/Personal'),
+          meta: {
+            keepAlive: false
+          }
+        },
+        {
+          path: '/write',
+          name: 'Write',
+          component: () => import('./views/Write'),
           meta: {
             keepAlive: false
           }

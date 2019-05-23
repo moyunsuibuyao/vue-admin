@@ -137,6 +137,8 @@ export default {
     writeArticle() {
       if (this.userInfo.identity === '0') {
         this.$Message.warning('暂无权限')
+      } else {
+        this.$router.push('/write')
       }
     },
     selectMenu() {

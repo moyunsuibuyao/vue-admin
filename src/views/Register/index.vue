@@ -27,7 +27,7 @@
         <FormItem>
           <Button type="primary" long @click="submitRegisterData">注册</Button>
           <p class="go-login__page" @click="$router.push('/login')">
-            没有账号，去注册
+            已有账号，去登录
           </p>
         </FormItem>
       </Form>

@@ -1,5 +1,5 @@
 <template>
-  <div class="base-form">
+  <div class="base-form h-100">
     <Form :model="infoForm" ref="infoForm" label-position="left" :label-width="60">
       <Row :gutter="40">
         <Col span="6">

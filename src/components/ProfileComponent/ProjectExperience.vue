@@ -1,5 +1,5 @@
 <template>
-  <div class="project-experience h-100" style="overflow-y: auto">
+  <div class="project-experience h-100 of-y-auto">
     <Timeline class="m-t-10">
       <TimelineItem v-for="item in dataList" :key="item._id">
         <Card>
