@@ -10,6 +10,7 @@
         </p>
       </div>
       <mavon-editor
+        class="m-b-80"
         v-html="content"
         :subfield="false"
         defaultOpen="preview"
