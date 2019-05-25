@@ -39,7 +39,7 @@ const router = new Router({
           }
         },
         {
-          path: '/read',
+          path: '/read/:id',
           name: 'Read',
           component: () => import('./views/Read'),
           meta: {

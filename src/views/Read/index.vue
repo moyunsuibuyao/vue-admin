@@ -28,7 +28,6 @@ export default {
   name: 'index',
   data() {
     return {
-      articleId: '',
       content: '',
       articleInfo: {},
       type: ''
@@ -39,15 +38,13 @@ export default {
       return this.$store.getters.userInfo
     }
   },
-  created () {
-    this.articleId = this.$route.query.id
-    console.log(this.$axios.defaults.baseURL)
+  created() {
     this.initArticle()
   },
   methods: {
     initArticle() {
       this.$axios.get('/api/articles/item', {
-        params: { id: this.articleId }
+        params: { id: this.$route.params.id }
       }).then((res) => {
         if (res && res.data) {
           this.articleInfo = res.data
@@ -73,6 +70,10 @@ export default {
       border-bottom: none!important;
     }
     .post-node {
+      h1 {
+        color: black;
+        font-size: 32px;
+      }
       margin: 0 auto;
       padding-bottom: 20px;
       width: 65%;

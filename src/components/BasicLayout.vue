@@ -20,7 +20,7 @@
             <div class="layout-nav">
               <template v-for="item in menuList">
                 <MenuItem
-                  v-if="!item.children.length"
+                  v-if="!(item.children && item.children.length)"
                   :to="item.path"
                   :key="item._id"
                   :name="item.path"
@@ -34,8 +34,7 @@
                     {{item.name}}
                   </template>
                   <template v-for="val in item.children">
-<!--                    <MenuItem :key="val._id" :name="val.path" :to="val.path">{{val.name}}</MenuItem>-->
-                    <MenuItem :key="val._id" :name="val.path" to="/profile">{{val.name}}</MenuItem>
+                    <MenuItem :key="val._id" :name="val.path" :to="val.path">{{val.name}}</MenuItem>
                   </template>
                 </Submenu>
               </template>
@@ -108,9 +107,7 @@ export default {
     getMenuList() {
       this.$axios.get('/api/menus/list').then((res) => {
         if (res.data && res.data.length) {
-          this.menuList = this.treeData(res.data).filter((item) => {
-            return item.level !== 2
-          })
+          this.menuList = res.data
         } else {
           this.menuList = []
         }
@@ -119,19 +116,19 @@ export default {
         })
       })
     },
-    treeData(data) {
-      data.forEach((item) => {
-        if (item.level === 1) {
-          this.$set(item, 'children', [])
-        }
-        data.forEach((val) => {
-          if (item.level === 2 && item.parentId === val._id) {
-            val.children.push(item)
-          }
-        })
-      })
-      return data
-    },
+    // treeData(data) {
+    //   data.forEach((item) => {
+    //     if (item.level === 1) {
+    //       this.$set(item, 'children', [])
+    //     }
+    //     data.forEach((val) => {
+    //       if (item.level === 2 && item.parentId === val._id) {
+    //         val.children.push(item)
+    //       }
+    //     })
+    //   })
+    //   return data
+    // },
     writeArticle() {
       if (this.userInfo.identity === '1') {
         this.$router.push('/write/add')

@@ -32,11 +32,13 @@
                 {{item.description}}
               </p>
               <div class="tr p-t-6 p-b-6">
-                <Button type="text" @click="readArticle(item)">
-                  <span class="fz-14" style="font-weight: 500">
-                   >>> 阅读全文
-                  </span>
-                </Button>
+                <router-link :to="'/read/' + item._id" tag="a" target="_blank">
+                  <Button type="text">
+                    <span class="fz-14" style="font-weight: 500">
+                     >>> 阅读全文
+                    </span>
+                  </Button>
+                </router-link>
               </div>
             </Card>
           </Col>
