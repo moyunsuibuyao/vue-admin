@@ -14,16 +14,14 @@
           style="height: 64px"
           :active-name="$route.path"
           ref="sideMenu"
-          @on-select="selectMenu"
         >
           <div class="layout-header__wrapper">
             <div class="layout-title">三米主页</div>
             <div class="layout-nav">
-<!--              :to="item.path"-->
               <template v-for="item in menuList">
                 <MenuItem
                   v-if="!item.children.length"
-                  to="/profile"
+                  :to="item.path"
                   :key="item._id"
                   :name="item.path"
                 >
@@ -58,7 +56,7 @@
                   <span class="fa fa-caret-down caret-down"></span>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="personal">个人信息</DropdownItem>
+                  <DropdownItem name="personal">三米的个人信息</DropdownItem>
                   <DropdownItem name="logout">退出</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -135,15 +133,10 @@ export default {
       return data
     },
     writeArticle() {
-      if (this.userInfo.identity === '0') {
-        this.$Message.warning('暂无权限')
+      if (this.userInfo.identifier === '1') {
+        this.$router.push('/write/add')
       } else {
-        this.$router.push('/write')
-      }
-    },
-    selectMenu() {
-      if (this.userInfo.identity === '0') {
-        return this.$Message.warning('现只开放简历模块，其他模块暂未开放')
+        this.$Message.info('对不起，只有三米才有该权限')
       }
     },
     handleClick(name) {
@@ -154,7 +147,7 @@ export default {
           break
         case 'personal':
           if (this.userInfo.identity === '0') {
-            return this.$Message.warning('暂无权限')
+            return this.$Message.info('对不起，只有三米才有该权限')
           }
           this.$router.push('/personal')
           break

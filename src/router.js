@@ -39,21 +39,13 @@ const router = new Router({
           name: 'Profile',
           component: () => import('./views/Profile'),
           meta: {
-            keepAlive: false
+            keepAlive: true
           }
         },
         {
-          path: '/article/essay',
-          name: 'Essay',
-          component: () => import('./views/Article/essay'),
-          meta: {
-            keepAlive: false
-          }
-        },
-        {
-          path: '/article/frontend',
+          path: '/article',
           name: 'Frontend',
-          component: () => import('./views/Article/frontend'),
+          component: () => import('./views/Article'),
           meta: {
             keepAlive: false
           }
@@ -91,7 +83,7 @@ const router = new Router({
           }
         },
         {
-          path: '/write',
+          path: '/write/:id',
           name: 'Write',
           component: () => import('./views/Write'),
           meta: {

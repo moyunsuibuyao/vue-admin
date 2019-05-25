@@ -1,9 +1,10 @@
 <template>
   <div class="write">
-    <div class="m-b-20" style="z-index: 1000">
-      <Select v-model="articleType" style="width: 200px">
+    <div style="z-index: 1000" class="m-b-20">
+      <Select v-model="articleType" style="width: 200px" multiple placeholder="请选择文章分类">
         <Option v-for="item in typeList" :key="item._id" :value="item._id">{{item.name}}</Option>
       </Select>
+      <Input :maxlength="100" class="d-inline-block w-60 m-l-20" v-model="description" placeholder="请输入文章简介，100字内"></Input>
     </div>
     <div>
       <mavon-editor
@@ -27,9 +28,11 @@ export default {
   data() {
     return {
       // 文章类型，0：前端，1：随笔
-      articleType: '',
+      articleType: [],
       typeList: [],
+      articleId: '',
       content: '',
+      description: '',
       markdownOption: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -67,10 +70,17 @@ export default {
   computed: {
     editorHeight() {
       return `${window.innerHeight - 160}px`
+    },
+    userInfo() {
+      return this.$store.getters.userInfo
     }
   },
   created () {
+    this.articleId = this.$route.params.id
     this.initTypeList()
+    if (this.articleId !== 'add') {
+      this.initArticle()
+    }
   },
   methods: {
     initTypeList() {
@@ -82,11 +92,56 @@ export default {
         }
       })
     },
-    saveMyWrite(value, render) {
-      const title = document.createRange().createContextualFragment(render).children[0].innerText
-      console.log({
-        title
+    initArticle() {
+      this.$axios.get('/api/articles/item', {
+        params: { id: this.articleId }
+      }).then((res) => {
+        if (res && res.data) {
+          res.data.writeType.forEach((item) => {
+            this.articleType.push(item._id)
+          })
+          this.content = Base64.decode(res.data.markdownContent)
+          this.description = res.data.description
+        }
       })
+    },
+    saveMyWrite(value, render) {
+      const editor = document.createRange().createContextualFragment(render).children[0]
+      const title = editor && editor.innerText ? editor.innerText : ''
+      const params = this.getParamsData(title, value, render)
+      const api = this.articleId === 'add' ? '/api/articles/add' : '/api/articles/edit'
+      this.$axios.post(api, params).then((res) => {
+        if (res && res.data) {
+          this.articleId = res.data._id
+          this.$router.push(`/write/${res.data._id}`)
+          return this.$Message.success(this.articleId === 'add' ? '添加成功' : '编辑成功')
+        }
+      })
+    },
+    getParamsData(title, render, value) {
+      const params = {}
+      Object.assign(params, {
+        title,
+        content: Base64.encode(render),
+        markdownContent: Base64.encode(value),
+        creatorId: this.userInfo.id,
+        creator: this.userInfo.name,
+        writeType: this.articleType,
+        description: this.description
+      })
+      if (!params.writeType.length) {
+        return this.$Message.warning('请选择文章分类')
+      }
+      if (!params.description) {
+        return this.$Message.warning('请输入文章简介')
+      }
+      if (!params.title) {
+        return this.$Message.warning('请输入文章标题')
+      }
+      if (this.articleId !== 'add') {
+        params._id = this.articleId
+      }
+      return params
     }
   }
 }
