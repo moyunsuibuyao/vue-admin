@@ -1,10 +1,10 @@
 <template>
   <div class="article">
-    <Card>
+    <Card dis-hover>
       <div class="wrapper-filter d-flex">
         <div class="w-px-70 m-t-1">文章类别</div>
         <div class="flex_1">
-          <CheckboxGroup v-model="isChecked">
+          <CheckboxGroup v-model="isChecked" @on-change="initArticleList">
             <template v-for="item in typeList">
               <Checkbox class="m-l-10" :key="item._id" :label="item._id">{{item.name}}</Checkbox>
             </template>
@@ -12,7 +12,7 @@
         </div>
       </div>
     </Card>
-    <div class="article-list m-t-10">
+    <div class="article-list m-t-10" v-if="articleList.length">
       <Row type="flex" :gutter="20">
         <template v-for="(item, index) in articleList">
           <Col span="12" :key="index" class="m-t-10">
@@ -32,7 +32,7 @@
                 {{item.description}}
               </p>
               <div class="tr p-t-6 p-b-6">
-                <Button type="text">
+                <Button type="text" @click="readArticle(item)">
                   <span class="fz-14" style="font-weight: 500">
                    >>> 阅读全文
                   </span>
@@ -43,12 +43,13 @@
         </template>
       </Row>
     </div>
+    <div v-else class="bd m-t-10 tc fz-16 no-content">
+      暂无内容
+    </div>
   </div>
 </template>
 
 <script>
-import { Base64 } from 'js-base64'
-
 export default {
   name: 'index',
   data() {
@@ -82,24 +83,22 @@ export default {
       })
     },
     initArticleList() {
-      const params = {}
-      this.$axios.get('/api/articles/list', { params }).then((res) => {
+      this.$axios.get('/api/articles/list', { params: { type: this.isChecked } }).then((res) => {
         if (res && res.data) {
           this.articleList = res.data
-          this.articleList.forEach((item) => {
-            console.log(Base64.decode(item.content))
-          })
         } else {
           this.articleList = []
         }
       })
     },
     removeArticle(data) {
-      if (this.userInfo.identifier === '1') {
+      console.log(this.userInfo.identity)
+      if (this.userInfo.identity === '1') {
         this.$axios.get('/api/articles/delete', {
           params: { id: data._id }
         }).then((res) => {
           if (res && res.data) {
+            this.initArticleList()
             this.$Message.success(res.data.message)
           } else {
             this.$Message.warning('删除失败，请稍后再试')
@@ -110,24 +109,43 @@ export default {
       }
     },
     editArticle(item) {
-      if (this.userInfo.identifier === '1') {
+      if (this.userInfo.identity === '1') {
         this.$router.push(`/write/${item._id}`)
       } else {
         this.$Message.info('对不起，只有三米才有该权限')
       }
+    },
+    readArticle(item) {
+      const newPage = this.$router.resolve({
+        name: 'Read',
+        query: {
+          id: item._id
+        }
+      })
+      window.open(newPage.href, '_blank')
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-  @import "./styles";
+  .no-content {
+    height: 350px;
+    line-height: 350px;
+    color: #808695;
+  }
 </style>
 <style lang="less">
   .article {
     .article-list {
       .ivu-card-body {
         padding: 0!important;
+      }
+      .ivu-btn:focus {
+        box-shadow: none!important;
+      }
+      .ivu-btn-text:focus {
+         box-shadow: none!important;
       }
     }
   }

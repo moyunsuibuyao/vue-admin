@@ -118,7 +118,7 @@ export default {
         }
       })
     },
-    getParamsData(title, render, value) {
+    getParamsData(title, value, render) {
       const params = {}
       Object.assign(params, {
         title,

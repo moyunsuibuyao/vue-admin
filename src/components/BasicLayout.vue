@@ -133,7 +133,7 @@ export default {
       return data
     },
     writeArticle() {
-      if (this.userInfo.identifier === '1') {
+      if (this.userInfo.identity === '1') {
         this.$router.push('/write/add')
       } else {
         this.$Message.info('对不起，只有三米才有该权限')

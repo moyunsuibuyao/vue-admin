@@ -22,10 +22,6 @@ const router = new Router({
       name: '404',
       component: () => import('./views/NoFound')
     },
-    // {
-    //   path: '/',
-    //   redirect: '/index'
-    // },
     {
       path: '/',
       redirect: '/profile'
@@ -43,8 +39,16 @@ const router = new Router({
           }
         },
         {
+          path: '/read',
+          name: 'Read',
+          component: () => import('./views/Read'),
+          meta: {
+            keepAlive: false
+          }
+        },
+        {
           path: '/article',
-          name: 'Frontend',
+          name: 'Article',
           component: () => import('./views/Article'),
           meta: {
             keepAlive: false
