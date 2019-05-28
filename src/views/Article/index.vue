@@ -12,10 +12,10 @@
         </div>
       </div>
     </Card>
-    <div class="article-list m-t-10" v-if="articleList.length">
+    <div class="article-list m-t-10 m-b-20 of-y-auto" v-if="articleList.length" :style="{ height: listHeight }">
       <Row type="flex" :gutter="20">
         <template v-for="(item, index) in articleList">
-          <Col span="12" :key="index" class="m-t-10">
+          <Col span="8" :key="index" class="m-t-10">
             <Card :key="item._id">
               <p slot="title">{{item.title}}</p>
               <p slot="extra">
@@ -45,8 +45,21 @@
         </template>
       </Row>
     </div>
-    <div v-else class="bd m-t-10 tc fz-16 no-content">
+    <div v-else class="bd m-t-10 tc fz-16 m-b-20 no-content" :style="{ height: listHeight, lineHeight: listHeight }">
       暂无内容
+    </div>
+    <div class="tr p-r-16 bd-top">
+      <Page
+        class="m-t-16"
+        :total="pageTotal"
+        :show-elevator="true"
+        :show-sizer="true"
+        :show-total="true"
+        :page-size="pageSize"
+        :current.sync="pageNo"
+        @on-change="changePageNo"
+        @on-page-size-change="changePageSize"
+      />
     </div>
   </div>
 </template>
@@ -59,12 +72,18 @@ export default {
       typeList: [],
       articleList: [],
       isChecked: [],
-      keyword: ''
+      keyword: '',
+      pageTotal: 0,
+      pageNo: 1,
+      pageSize: 10
     }
   },
   computed: {
     userInfo() {
       return this.$store.getters.userInfo
+    },
+    listHeight() {
+      return `${window.innerHeight - 240}px`
     }
   },
   created () {
@@ -85,11 +104,19 @@ export default {
       })
     },
     initArticleList() {
-      this.$axios.get('/api/articles/list', { params: { type: this.isChecked } }).then((res) => {
-        if (res && res.data) {
-          this.articleList = res.data
+      this.$axios.get('/api/articles/list', {
+        params: {
+          type: this.isChecked,
+          pageSize: this.pageSize,
+          pageNo: this.pageNo
+        }
+      }).then((res) => {
+        if (res && res.data && res.data.dataList.length) {
+          this.articleList = res.data.dataList
+          this.pageTotal = res.data.page && res.data.page.pageTotal ? res.data.page.pageTotal : 0
         } else {
           this.articleList = []
+          this.pageTotal = 0
         }
       })
     },
@@ -117,14 +144,13 @@ export default {
         this.$Message.info('对不起，只有三米才有该权限')
       }
     },
-    readArticle(item) {
-      const newPage = this.$router.resolve({
-        name: 'Read',
-        query: {
-          id: item._id
-        }
-      })
-      window.open(newPage.href, '_blank')
+    changePageNo(pageNo) {
+      this.pageNo = pageNo
+      this.initArticleList()
+    },
+    changePageSize(pageSize) {
+      this.pageSize = pageSize
+      this.initArticleList()
     }
   }
 }
@@ -132,8 +158,6 @@ export default {
 
 <style scoped lang="less">
   .no-content {
-    height: 350px;
-    line-height: 350px;
     color: #808695;
   }
 </style>
