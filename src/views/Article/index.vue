@@ -22,6 +22,7 @@
                 <Button size="small" type="primary" shape="circle" icon="ios-create" @click="editArticle(item)"></Button>
                 <Poptip
                   confirm
+                  placement="bottom"
                   title="请确认是否删除？"
                   @on-ok="removeArticle(item)"
                 >
