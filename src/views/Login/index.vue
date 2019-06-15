@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <img src="../../assets/bg.jpg" alt="">
     <Card class="login-card">
       <span slot="title">欢迎登录</span>
       <Form :model="loginForm" ref="loginForm" :rules="rules">

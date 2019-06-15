@@ -57,6 +57,7 @@
         :show-sizer="true"
         :show-total="true"
         :page-size="pageSize"
+        :page-sizes="[9, 15, 24]"
         :current.sync="pageNo"
         @on-change="changePageNo"
         @on-page-size-change="changePageSize"
@@ -76,7 +77,7 @@ export default {
       keyword: '',
       pageTotal: 0,
       pageNo: 1,
-      pageSize: 10
+      pageSize: 9
     }
   },
   computed: {
