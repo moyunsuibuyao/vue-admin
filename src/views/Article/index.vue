@@ -57,7 +57,7 @@
         :show-sizer="true"
         :show-total="true"
         :page-size="pageSize"
-        :page-sizes="[9, 15, 24]"
+        :page-size-opts="[9, 15, 24]"
         :current.sync="pageNo"
         @on-change="changePageNo"
         @on-page-size-change="changePageSize"
