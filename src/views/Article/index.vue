@@ -29,7 +29,7 @@
                   <Button type="error" size="small" shape="circle" icon="ios-trash" class="m-l-5"></Button>
                 </Poptip>
               </p>
-              <p class="bd-bottom l-h-30 p-16 of-y-auto" style="height: 120px;">
+              <p class="bd-bottom l-h-28 p-16 of-y-auto" style="height: 120px;">
                 {{item.description}}
               </p>
               <div class="tr p-t-6 p-b-6">
