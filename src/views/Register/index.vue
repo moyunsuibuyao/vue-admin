@@ -1,6 +1,5 @@
 <template>
   <div class="register">
-    <img src="../../assets/bg.jpg" alt="">
     <Card class="register-card">
       <span slot="title">注册账号</span>
       <Form :model="registerForm" ref="registerForm" :rules="rules">
