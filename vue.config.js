@@ -7,5 +7,5 @@ module.exports = {
       //   javascriptEnabled: true // 设置为true
       // },
     }
-  },
+  }
 }

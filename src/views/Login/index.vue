@@ -21,6 +21,7 @@
         </FormItem>
       </Form>
     </Card>
+    <div class="login-footer" @click="linkTo">粤ICP备18073429号-1</div>
   </div>
 </template>
 
@@ -74,6 +75,9 @@ export default {
         (typeof value === 'object' && Object.keys(value).length === 0) ||
         (typeof value === 'string' && value.trim().length === 0)
       )
+    },
+    linkTo() {
+      window.location.href = 'http://beian.miit.gov.cn'
     }
   }
 }
